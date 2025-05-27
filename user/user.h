@@ -1,5 +1,14 @@
 struct stat;
 
+struct process_info {
+  int pid;
+  char name[16];
+  int state;
+};
+
+int getprocs(struct process_info *pinfo, int max);
+
+
 // system calls
 int fork(void);
 int exit(int) __attribute__((noreturn));

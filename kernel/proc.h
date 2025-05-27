@@ -105,3 +105,12 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 };
+
+struct process_info {
+  int pid;
+  char name[16];
+  int state;
+};
+
+int getprocs(struct process_info* addr, int max);
+

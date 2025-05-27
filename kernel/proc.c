@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "defs.h"
 
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -693,3 +694,29 @@ procdump(void)
     printf("\n");
   }
 }
+
+int getprocs(struct process_info *addr, int max)
+
+{
+  struct proc *p;
+  int count = 0;
+
+  for (int i = 0; i < NPROC && count < max; i++) {
+    p = &proc[i];
+
+    if (p->state != UNUSED) {
+      struct process_info pi;
+      pi.pid = p->pid;
+      safestrcpy(pi.name, p->name, sizeof(pi.name));
+      pi.state = p->state;
+
+      if (copyout(myproc()->pagetable, (uint64)addr + count * sizeof(struct process_info), (char *)&pi, sizeof(pi)) < 0)
+        return -1;
+
+      count++;
+    }
+  }
+
+  return count;
+}
+
